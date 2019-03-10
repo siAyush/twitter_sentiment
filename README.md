@@ -9,6 +9,7 @@ This is the code for the Twitter Sentiment Analyzer. The code uses the tweepy li
 
 1. tweepy 
 2. textblob
+
 Note: Before using it create twitter developer account and use your own keys. And paste 
 those keys in the `script.py` code.
 
