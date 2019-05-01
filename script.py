@@ -3,11 +3,11 @@ from textblob import TextBlob
 import sys
 
 # Authenticate
-consumer_key= 'CONSUMER_KEY_HERE'
-consumer_secret= 'CONSUMER_SECRET_HERE'
+consumer_key= 'consumer_key'
+consumer_secret= 'consumer_secret'
 
-access_token='ACCESS_TOKEN_HERE'
-access_token_secret='ACCESS_TOKEN_SECRET_HERE'
+access_token= 'access_token'
+access_token_secret= 'access_token_secret'
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
@@ -21,9 +21,21 @@ def labels(analysis, threshold=0):
     else:
         return 'negative'
 
-tweets = api.search('candidate', count = 100)
-with open('%s_tweets.csv'%candidate, 'w') as candidate_csv:
-    candidate_csv.write('tweet, sentiment_label \n')
-    for tweet in tweets:
-        analysis = TextBlob(tweet.text)
-        candidate_csv.write('%s %s\n' %(tweet.text, labels(analysis)))
+neg_count = 0
+pos_count = 0
+
+tweets = api.search('candidate',count=100)
+
+for tweet in tweets:
+    analysis = TextBlob(tweet.text)
+    if labels(analysis) == 'positive':
+        pos_count += 1
+    elif labels(analysis) == 'negative':
+        neg_count += 1
+
+total = pos_count + neg_count
+pos_per = (pos_count/total)*100
+neg_per = (neg_count/total)*100
+
+print('percentage of positive tweets: %.2f' %pos_per)
+print('percentage of negative tweets: %.2f' %neg_per)
